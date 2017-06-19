@@ -8,12 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		9B235BC01EF7A8D700E3E7FB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BBF1EF7A8D700E3E7FB /* AppDelegate.swift */; };
-		9B235BC21EF7A8D700E3E7FB /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BC11EF7A8D700E3E7FB /* ViewController.swift */; };
+		9B235BC21EF7A8D700E3E7FB /* MainVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BC11EF7A8D700E3E7FB /* MainVC.swift */; };
 		9B235BC51EF7A8D700E3E7FB /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B235BC31EF7A8D700E3E7FB /* Main.storyboard */; };
 		9B235BC81EF7A8D700E3E7FB /* JustText.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BC61EF7A8D700E3E7FB /* JustText.xcdatamodeld */; };
 		9B235BCA1EF7A8D700E3E7FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9B235BC91EF7A8D700E3E7FB /* Assets.xcassets */; };
 		9B235BCD1EF7A8D700E3E7FB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9B235BCB1EF7A8D700E3E7FB /* LaunchScreen.storyboard */; };
 		9B235BD81EF7A8D700E3E7FB /* JustTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BD71EF7A8D700E3E7FB /* JustTextTests.swift */; };
+		9B235BE71EF7B01400E3E7FB /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BE61EF7B01400E3E7FB /* LoginVC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,7 +30,7 @@
 /* Begin PBXFileReference section */
 		9B235BBC1EF7A8D700E3E7FB /* JustText.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JustText.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B235BBF1EF7A8D700E3E7FB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		9B235BC11EF7A8D700E3E7FB /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		9B235BC11EF7A8D700E3E7FB /* MainVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainVC.swift; sourceTree = "<group>"; };
 		9B235BC41EF7A8D700E3E7FB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		9B235BC71EF7A8D700E3E7FB /* JustText.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = JustText.xcdatamodel; sourceTree = "<group>"; };
 		9B235BC91EF7A8D700E3E7FB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -38,6 +39,7 @@
 		9B235BD31EF7A8D700E3E7FB /* JustTextTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = JustTextTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B235BD71EF7A8D700E3E7FB /* JustTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JustTextTests.swift; sourceTree = "<group>"; };
 		9B235BD91EF7A8D700E3E7FB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9B235BE61EF7B01400E3E7FB /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,8 +81,11 @@
 		9B235BBE1EF7A8D700E3E7FB /* JustText */ = {
 			isa = PBXGroup;
 			children = (
+				9B235BE51EF7AFE300E3E7FB /* Services */,
+				9B235BE41EF7AFDC00E3E7FB /* Model */,
+				9B235BE31EF7AFD500E3E7FB /* View */,
+				9B235BE21EF7AFCC00E3E7FB /* Controller */,
 				9B235BBF1EF7A8D700E3E7FB /* AppDelegate.swift */,
-				9B235BC11EF7A8D700E3E7FB /* ViewController.swift */,
 				9B235BC31EF7A8D700E3E7FB /* Main.storyboard */,
 				9B235BC91EF7A8D700E3E7FB /* Assets.xcassets */,
 				9B235BCB1EF7A8D700E3E7FB /* LaunchScreen.storyboard */,
@@ -97,6 +102,36 @@
 				9B235BD91EF7A8D700E3E7FB /* Info.plist */,
 			);
 			path = JustTextTests;
+			sourceTree = "<group>";
+		};
+		9B235BE21EF7AFCC00E3E7FB /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				9B235BC11EF7A8D700E3E7FB /* MainVC.swift */,
+				9B235BE61EF7B01400E3E7FB /* LoginVC.swift */,
+			);
+			name = Controller;
+			sourceTree = "<group>";
+		};
+		9B235BE31EF7AFD500E3E7FB /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		9B235BE41EF7AFDC00E3E7FB /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		9B235BE51EF7AFE300E3E7FB /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Services;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -204,8 +239,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B235BC21EF7A8D700E3E7FB /* ViewController.swift in Sources */,
+				9B235BC21EF7A8D700E3E7FB /* MainVC.swift in Sources */,
 				9B235BC81EF7A8D700E3E7FB /* JustText.xcdatamodeld in Sources */,
+				9B235BE71EF7B01400E3E7FB /* LoginVC.swift in Sources */,
 				9B235BC01EF7A8D700E3E7FB /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -349,6 +385,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = LXKYY3Z6TA;
 				INFOPLIST_FILE = JustText/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhusudhanbr.JustText;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -362,6 +399,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = LXKYY3Z6TA;
 				INFOPLIST_FILE = JustText/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.madhusudhanbr.JustText;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -418,6 +456,7 @@
 				9B235BDE1EF7A8D700E3E7FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9B235BDF1EF7A8D700E3E7FB /* Build configuration list for PBXNativeTarget "JustTextTests" */ = {
 			isa = XCConfigurationList;
@@ -426,6 +465,7 @@
 				9B235BE11EF7A8D700E3E7FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

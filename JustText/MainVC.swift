@@ -6,20 +6,29 @@
 //  Copyright © 2017 Madhusudhan. All rights reserved.
 //
 
-import UIKit
+import  UIKit
 
-class ViewController: UIViewController {
+
+class MainVC: UITableViewController
+{
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
+        
+        
+        let button1 = UIBarButtonItem(title: "Logout", style: .plain , target: self, action: #selector(logoutButtonPressed))
+        self.navigationItem.leftBarButtonItem = button1
+        
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func logoutButtonPressed() {
+        
+        let loginVC = LoginVC()
+        
+        present(loginVC, animated: true, completion: nil)
+        
+        
     }
-
 
 }
 
