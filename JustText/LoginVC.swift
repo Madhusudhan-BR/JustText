@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class LoginVC: UIViewController {
     
@@ -32,9 +33,11 @@ class LoginVC: UIViewController {
         button.setTitleColor(UIColor(red: 244/255, green: 167/255, blue: 35/255, alpha: 1), for: .normal )
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
         button.translatesAutoresizingMaskIntoConstraints = false
-       
+        button.addTarget(self, action: #selector(registerButtonPressed), for: .touchUpInside)
         return button
     }()
+    
+    
     
     let nameTextField : UITextField = {
         
@@ -143,6 +146,40 @@ class LoginVC: UIViewController {
         profileImage.heightAnchor.constraint(equalToConstant: 200).isActive = true
         
         setupRegisterButton()
+        
+    }
+    
+    func registerButtonPressed() {
+        
+        guard let name = nameTextField.text, let email = emailTextField.text, let password = passwordTextField.text else {
+            print("MADHU: Invalid data! ")
+            return
+        }
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (user, error) in
+          
+            if error != nil {
+                print("MADHU : \(error.debugDescription)")
+                return
+            }
+            
+            // user successgully authenticated 
+            
+            let values = ["name" : name, "email" : email]
+            let ref_individualUsers = ref_users.child((user?.uid)!)
+            
+            ref_individualUsers.updateChildValues(values, withCompletionBlock: { (err, ref) in
+                
+                if err != nil {
+                    print("MADHU: Error while updating users on DB \(err.debugDescription)")
+                        return
+                }
+                
+                print("MADHU: Saved users successfully to DB")
+            })
+            
+        }
+        
         
     }
     
