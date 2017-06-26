@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class LoginVC: UIViewController {
+class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
     let inputContainerView: UIView = {
         //let view = UIView()
@@ -85,14 +85,46 @@ class LoginVC: UIViewController {
         return tf
     }()
     
-    let profileImage: UIImageView = {
+    lazy var profileImage: UIImageView = {
         let img = UIImageView()
         img.image = UIImage(named: "Group")
         img.translatesAutoresizingMaskIntoConstraints = false
         img.contentMode = .scaleAspectFill
+        img.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTapped)))
+        img.isUserInteractionEnabled = true
         return img
     }()
- 
+    
+    func handleProfileImageTapped() {
+        
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        var imageSelectedFromPicker: UIImage?
+        
+        if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
+            imageSelectedFromPicker = editedImage
+        } else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage {
+            imageSelectedFromPicker = originalImage
+        }
+        
+        if let selectedImage = imageSelectedFromPicker {
+            profileImage.image = selectedImage
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        print("Cancelled")
+        dismiss(animated: true, completion: nil)
+    }
+    
     let loginRegisterSegmentedControl : UISegmentedControl  = {
         let sc = UISegmentedControl(items: ["Login ", "Register"])
         sc.translatesAutoresizingMaskIntoConstraints = false
@@ -267,20 +299,49 @@ class LoginVC: UIViewController {
             
             // user successgully authenticated 
             
-            let values = ["name" : name, "email" : email]
-            let ref_individualUsers = ref_users.child((user?.uid)!)
             
-            ref_individualUsers.updateChildValues(values, withCompletionBlock: { (err, ref) in
+            let storage_ref = Storage.storage().reference().child("profileImages").child("\(user?.uid)")
+            if let profileImageJpeg = UIImageJPEGRepresentation(self.profileImage.image!, 0.2){
                 
-                if err != nil {
-                    print("MADHU: Error while updating users on DB \(err.debugDescription)")
+                storage_ref.putData(profileImageJpeg, metadata: nil, completion: { (metadata, error) in
+                    
+                    if error != nil {
+                        print(error)
                         return
-                }
+                    }
+                    
+                    if let profileImageDownloadUrl = metadata?.downloadURL()?.absoluteString {
+                        
+                        let values = ["name" : name, "email" : email, "profileImageUrl" : profileImageDownloadUrl]
+                        let ref_individualUsers = ref_users.child((user?.uid)!)
+                        
+                        ref_individualUsers.updateChildValues(values, withCompletionBlock: { (err, ref) in
+                            
+                            if err != nil {
+                                print("MADHU: Error while updating users on DB \(err.debugDescription)")
+                                return
+                            }
+                            
+                            print("MADHU: Saved users successfully to DB")
+                            
+                            self.dismiss(animated: true, completion: nil)
+                        })
+
+                        
+                        
+                    }
+                    
+                    
+                })
+
                 
-                print("MADHU: Saved users successfully to DB")
-                
-                self.dismiss(animated: true, completion: nil)
-            })
+            }
+            
+            
+            
+            
+            
+            
             
         }
         
