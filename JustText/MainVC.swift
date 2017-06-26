@@ -7,7 +7,7 @@
 //
 
 import  UIKit
-
+import  Firebase
 
 class MainVC: UITableViewController
 {
@@ -18,15 +18,33 @@ class MainVC: UITableViewController
         
         let button1 = UIBarButtonItem(title: "Logout", style: .plain , target: self, action: #selector(logoutButtonPressed))
         self.navigationItem.leftBarButtonItem = button1
+        checkIfUserLoggedIn()
+        
         
     }
 
     func logoutButtonPressed() {
         
+        
+        do {
+            try Auth.auth().signOut()
+        } catch let logoutError {
+            print(logoutError.localizedDescription)
+        }
+        
+        
+        
         let loginVC = LoginVC()
         
         present(loginVC, animated: true, completion: nil)
         
+        
+    }
+    
+    func checkIfUserLoggedIn() {
+        if Auth.auth().currentUser == nil {
+            perform(#selector(logoutButtonPressed), with: nil, afterDelay: 0 )
+        }
         
     }
 
