@@ -233,6 +233,16 @@ class LoginVC: UIViewController {
         }
         
         Auth.auth().signIn(withEmail: email, password: password) { (user, error) in
+            
+            
+            if error != nil {
+                print(error)
+                
+                return 
+            }
+            
+            print("MADHU: \(user?.uid)")
+            
             self.dismiss(animated: true, completion: nil )
             
         }
@@ -268,6 +278,7 @@ class LoginVC: UIViewController {
                 }
                 
                 print("MADHU: Saved users successfully to DB")
+                
                 self.dismiss(animated: true, completion: nil)
             })
             
