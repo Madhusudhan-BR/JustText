@@ -11,6 +11,8 @@ import Firebase
 
 class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
+    var mainVC = MainVC()
+    
     let inputContainerView: UIView = {
         //let view = UIView()
         
@@ -274,7 +276,7 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
             }
             
             print("MADHU: \(user?.uid)")
-            
+            self.mainVC.handleLoggedInUser()
             self.dismiss(animated: true, completion: nil )
             
         }
@@ -301,9 +303,9 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
             
             
             let storage_ref = Storage.storage().reference().child("profileImages").child("\(user?.uid)")
-            if let profileImageJpeg = UIImageJPEGRepresentation(self.profileImage.image!, 0.2){
+            if let profileImageJpeg = UIImageJPEGRepresentation(self.profileImage.image!, 0.1){
                 
-                storage_ref.putData(profileImageJpeg, metadata: nil, completion: { (metadata, error) in
+            storage_ref.putData(profileImageJpeg, metadata: nil, completion: { (metadata, error) in
                     
                     if error != nil {
                         print(error)
@@ -323,7 +325,7 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
                             }
                             
                             print("MADHU: Saved users successfully to DB")
-                            
+                            self.mainVC.handleLoggedInUser()
                             self.dismiss(animated: true, completion: nil)
                         })
 

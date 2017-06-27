@@ -44,7 +44,7 @@ class MainVC: UITableViewController
         
         
         let loginVC = LoginVC()
-        
+        loginVC.mainVC = self
         present(loginVC, animated: true, completion: nil)
         
         
