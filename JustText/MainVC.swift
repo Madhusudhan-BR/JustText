@@ -11,7 +11,7 @@ import  Firebase
 
 class MainVC: UITableViewController
 {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,13 +25,69 @@ class MainVC: UITableViewController
         
     }
     
+    func setupNavBar(user: User){
+        // self.navigationItem.title = user.name
+        
+        let newtitleView = UIView()
+        
+        newtitleView.frame = CGRect(x: 0, y: 0, width: 100, height: 40)
+        //newtitleView.backgroundColor = UIColor.blue
+        
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        newtitleView.addSubview(containerView)
+        
+        let profileImageView = UIImageView()
+        profileImageView.translatesAutoresizingMaskIntoConstraints = false
+        profileImageView.contentMode = .scaleAspectFit
+        profileImageView.layer.cornerRadius = 20
+        profileImageView.clipsToBounds = true
+        
+        containerView.addSubview(profileImageView)
+        if let profileImgUrl = user.profileImageUrl as? String {
+            
+            profileImageView.loadImageFromCache(profileImageUrl: profileImgUrl)
+        }
+        //constraints for the image view
+        
+        
+        profileImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        profileImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        let usernameLabel = UILabel()
+        containerView.addSubview(usernameLabel)
+        usernameLabel.text = user.name
+        usernameLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        usernameLabel.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 8).isActive = true
+        usernameLabel.centerYAnchor.constraint(equalTo: profileImageView.centerYAnchor).isActive = true
+        usernameLabel.rightAnchor.constraint(equalTo: containerView.rightAnchor).isActive = true
+        usernameLabel.heightAnchor.constraint(equalTo: profileImageView.heightAnchor).isActive = true
+        
+        containerView.centerYAnchor.constraint(equalTo: newtitleView.centerYAnchor).isActive = true
+        containerView.centerXAnchor.constraint(equalTo: newtitleView.centerXAnchor).isActive = true
+        
+        self.navigationItem.titleView = newtitleView
+        
+        newtitleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showChatVC)))
+    }
+    
+    func showChatVC() {
+        
+        let chatLogVC = ChatLogVC(collectionViewLayout: UICollectionViewFlowLayout())
+        self.navigationController?.pushViewController(chatLogVC, animated: true)
+        
+    }
+    
     func handleNewMessage() {
         let newMessageVC = NewMessageVC()
         let navController = UINavigationController(rootViewController: newMessageVC)
         present(navController, animated: true, completion: nil )
         
     }
-
+    
     func logoutButtonPressed() {
         
         
@@ -53,9 +109,9 @@ class MainVC: UITableViewController
     func checkIfUserLoggedIn() {
         if Auth.auth().currentUser?.uid == nil {
             //perform(#selector(logoutButtonPressed), with: nil, afterDelay: 0 )
-              let loginVC = LoginVC()
+            let loginVC = LoginVC()
             present(loginVC, animated: true, completion: nil)
-
+            
         } else {
             handleLoggedInUser()
         }
@@ -66,15 +122,22 @@ class MainVC: UITableViewController
         let uid = Auth.auth().currentUser?.uid
         
         Database.database().reference().child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
-           // print(snapshot) 
+            // print(snapshot)
             
             if let userInfoDict = snapshot.value as? Dictionary<String, Any> {
-                self.navigationItem.title = userInfoDict["name"] as? String 
+                let user = User()
+                user.name = userInfoDict["name"] as! String
+                user.email = userInfoDict["email"] as! String
+                user.profileImageUrl = userInfoDict["profileImageUrl"] as! String
+                
+                //  self.navigationItem.title = userInfoDict["name"] as? String
+                
+                self.setupNavBar(user: user)
             }
             
         })
         
     }
-
+    
 }
 
