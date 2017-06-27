@@ -49,6 +49,11 @@ class NewMessageVC: UITableViewController {
         dismiss(animated: true, completion: nil)
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 80
+    }
+    
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
@@ -58,7 +63,7 @@ class NewMessageVC: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! cell
         
         var user = users[indexPath.row]
         
@@ -67,24 +72,9 @@ class NewMessageVC: UITableViewController {
         
         
         if let profileImageUrl = user.profileImageUrl as? String{
-            let url = URL(string: profileImageUrl)
-           
-            URLSession.shared.dataTask(with: url!, completionHandler: { (Data, response, error) in
-                
-                if error != nil {
-                    print(error)
-                    
-                }
-                
-                DispatchQueue.main.async {
-                    cell.imageView?.image = UIImage(data: Data!)
 
-                }
-                
-                
-                
-            }).resume()
-            
+//            
+            cell.profileImageView.loadImageFromCache(profileImageUrl: profileImageUrl)
             
         }
         
@@ -95,9 +85,32 @@ class NewMessageVC: UITableViewController {
 }
 
 class cell : UITableViewCell {
+    
+    let profileImageView : UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 20
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        textLabel?.frame = CGRect(x: 56, y:  (textLabel?.frame.origin.y)! + 2 , width: (textLabel?.frame.width)!, height : (textLabel?.frame.height)!)
+        detailTextLabel?.frame = CGRect(x : 56, y:  (detailTextLabel?.frame.origin.y)!-2, width : (detailTextLabel?.frame.width)!, height : (detailTextLabel?.frame.height)!)
+
+    }
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
+        addSubview(profileImageView)
         
+        //anchors for profile image view 
+        profileImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
+        profileImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        profileImageView.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        profileImageView.heightAnchor.constraint(equalToConstant: 40).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {

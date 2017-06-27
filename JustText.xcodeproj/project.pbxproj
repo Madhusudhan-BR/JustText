@@ -19,6 +19,7 @@
 		9B235BEB1EF808C000E3E7FB /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BEA1EF808C000E3E7FB /* Constants.swift */; };
 		9B235BED1F00C40600E3E7FB /* NewMessageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BEC1F00C40600E3E7FB /* NewMessageVC.swift */; };
 		9B235BEF1F00DAAD00E3E7FB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BEE1F00DAAD00E3E7FB /* User.swift */; };
+		9B235BF21F020B7900E3E7FB /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9B235BF11F020B7900E3E7FB /* Extensions.swift */; };
 		C0F7EC675F9151158FC843C8 /* Pods_JustTextTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F19489569079E02C1ACE0AA7 /* Pods_JustTextTests.framework */; };
 		E43BBD35190AFBA90B4B13C8 /* Pods_JustText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C6E9AB9A9B591A929A8B9C3C /* Pods_JustText.framework */; };
 /* End PBXBuildFile section */
@@ -51,6 +52,7 @@
 		9B235BEA1EF808C000E3E7FB /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		9B235BEC1F00C40600E3E7FB /* NewMessageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewMessageVC.swift; sourceTree = "<group>"; };
 		9B235BEE1F00DAAD00E3E7FB /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		9B235BF11F020B7900E3E7FB /* Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		AAEB0E221B4085A1DBBF9745 /* Pods-JustTextTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JustTextTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-JustTextTests/Pods-JustTextTests.release.xcconfig"; sourceTree = "<group>"; };
 		C6E9AB9A9B591A929A8B9C3C /* Pods_JustText.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_JustText.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		C84A62DF820AEC4B99589B71 /* Pods-JustText.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-JustText.debug.xcconfig"; path = "Pods/Target Support Files/Pods-JustText/Pods-JustText.debug.xcconfig"; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 		9B235BBE1EF7A8D700E3E7FB /* JustText */ = {
 			isa = PBXGroup;
 			children = (
+				9B235BF01F020B6600E3E7FB /* Helpers */,
 				9B235BE81EF7E85200E3E7FB /* GoogleService-Info.plist */,
 				9B235BE51EF7AFE300E3E7FB /* Services */,
 				9B235BE41EF7AFDC00E3E7FB /* Model */,
@@ -176,6 +179,14 @@
 				9B235BEA1EF808C000E3E7FB /* Constants.swift */,
 			);
 			name = Services;
+			sourceTree = "<group>";
+		};
+		9B235BF01F020B6600E3E7FB /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				9B235BF11F020B7900E3E7FB /* Extensions.swift */,
+			);
+			name = Helpers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -386,6 +397,7 @@
 				9B235BEB1EF808C000E3E7FB /* Constants.swift in Sources */,
 				9B235BED1F00C40600E3E7FB /* NewMessageVC.swift in Sources */,
 				9B235BC21EF7A8D700E3E7FB /* MainVC.swift in Sources */,
+				9B235BF21F020B7900E3E7FB /* Extensions.swift in Sources */,
 				9B235BC81EF7A8D700E3E7FB /* JustText.xcdatamodeld in Sources */,
 				9B235BE71EF7B01400E3E7FB /* LoginVC.swift in Sources */,
 				9B235BC01EF7A8D700E3E7FB /* AppDelegate.swift in Sources */,
