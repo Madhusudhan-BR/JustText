@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/NewMessageVC.swift"
-            timestampString = "520151438.510143"
+            timestampString = "520179310.940105"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "35"
+            endingLineNumber = "35"
             landmarkName = "fetchUsers()"
             landmarkType = "7">
          </BreakpointContent>

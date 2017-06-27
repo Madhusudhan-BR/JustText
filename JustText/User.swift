@@ -11,6 +11,16 @@ import Foundation
 class User : NSObject {
     private var _name: String!
     private var _email: String!
+    private var _profileImageUrl: String!
+    
+    var profileImageUrl: String {
+        get {return _profileImageUrl
+        }
+        set {
+            _profileImageUrl = newValue
+        }
+    }
+    
     
     var name: String {
         get {return _name

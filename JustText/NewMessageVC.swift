@@ -27,6 +27,7 @@ class NewMessageVC: UITableViewController {
                 let user = User()
                 user.name = usersDict["name"] as! String
                 user.email = usersDict["email"] as! String
+                user.profileImageUrl = usersDict["profileImageUrl"] as! String
                 self.users.append(user)
                 print("MADHU : New user \(user.name)")
                 
@@ -63,6 +64,32 @@ class NewMessageVC: UITableViewController {
         
         cell.textLabel?.text = user.name
         cell.detailTextLabel?.text = user.email
+        
+        
+        if let profileImageUrl = user.profileImageUrl as? String{
+            let url = URL(string: profileImageUrl)
+           
+            URLSession.shared.dataTask(with: url!, completionHandler: { (Data, response, error) in
+                
+                if error != nil {
+                    print(error)
+                    
+                }
+                
+                DispatchQueue.main.async {
+                    cell.imageView?.image = UIImage(data: Data!)
+
+                }
+                
+                
+                
+            }).resume()
+            
+            
+        }
+        
+        
+        
         return cell
     }
 }
