@@ -12,12 +12,24 @@ class User : NSObject {
     private var _name: String!
     private var _email: String!
     private var _profileImageUrl: String!
+    private var _id: String!
+    
+    
     
     var profileImageUrl: String {
         get {return _profileImageUrl
         }
         set {
             _profileImageUrl = newValue
+        }
+    }
+    
+    var id: String {
+        get {
+            return _id
+        }
+        set {
+            _id = newValue
         }
     }
     

@@ -26,6 +26,7 @@ class NewMessageVC: UITableViewController {
         Database.database().reference().child("users").observe(.childAdded, with: { (snapchot) in
             if let usersDict = snapchot.value as? [String: Any] {
                 let user = User()
+                user.id = snapchot.key 
                 user.name = usersDict["name"] as! String
                 user.email = usersDict["email"] as! String
                 user.profileImageUrl = usersDict["profileImageUrl"] as! String
