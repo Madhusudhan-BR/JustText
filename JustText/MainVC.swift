@@ -71,12 +71,13 @@ class MainVC: UITableViewController
         
         self.navigationItem.titleView = newtitleView
         
-        newtitleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showChatVC)))
+        //newtitleView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(showChatVC)))
     }
     
-    func showChatVC() {
+    func showChatVCWithUser(user: User) {
         
         let chatLogVC = ChatLogVC(collectionViewLayout: UICollectionViewFlowLayout())
+        chatLogVC.user = user 
         self.navigationController?.pushViewController(chatLogVC, animated: true)
         
     }

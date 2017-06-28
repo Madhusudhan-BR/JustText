@@ -13,12 +13,12 @@ import Firebase
 class ChatLogVC: UICollectionViewController,UITextFieldDelegate {
     
     let inputTextFiled = UITextField()
-
+    var user : User?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        navigationItem.title = "Chat VC"
+        navigationItem.title = user?.name
         collectionView?.backgroundColor = UIColor.white
         
         setupInputComponents()

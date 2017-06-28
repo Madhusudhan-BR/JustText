@@ -58,8 +58,10 @@ class NewMessageVC: UITableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         dismiss(animated: true) { 
-            print("dismissed")
-            self.mainVC?.showChatVC()
+            //print("dismissed") 
+            let user = self.users[indexPath.row]
+            
+            self.mainVC?.showChatVCWithUser(user: user)
         }
     }
     
