@@ -53,6 +53,13 @@ class NewMessageVC: UITableViewController {
         return 72
     }
     
+    var chatlogVC : ChatLogVC?
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        dismiss(animated: true) { 
+            print("dismissed")
+        }
+    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
