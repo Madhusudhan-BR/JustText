@@ -83,6 +83,7 @@ class MainVC: UITableViewController
     
     func handleNewMessage() {
         let newMessageVC = NewMessageVC()
+        newMessageVC.mainVC = self 
         let navController = UINavigationController(rootViewController: newMessageVC)
         present(navController, animated: true, completion: nil )
         

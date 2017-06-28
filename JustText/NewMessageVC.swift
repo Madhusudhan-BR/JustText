@@ -16,6 +16,7 @@ class NewMessageVC: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(cell.self, forCellReuseIdentifier: cellID)
+     
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         fetchUsers()
         
@@ -53,11 +54,12 @@ class NewMessageVC: UITableViewController {
         return 72
     }
     
-    var chatlogVC : ChatLogVC?
+    var mainVC : MainVC?
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         dismiss(animated: true) { 
             print("dismissed")
+            self.mainVC?.showChatVC()
         }
     }
     
