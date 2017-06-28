@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520317179.61025"
+            timestampString = "520348185.01982"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
+            startingLineNumber = "205"
+            endingLineNumber = "205"
             landmarkName = "handleLoggedInUser()"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520317179.61025"
+            timestampString = "520348185.01982"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111"
+            startingLineNumber = "188"
+            endingLineNumber = "188"
             landmarkName = "checkIfUserLoggedIn()"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520317179.61025"
+            timestampString = "520348185.01982"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
+            startingLineNumber = "200"
+            endingLineNumber = "200"
             landmarkName = "handleLoggedInUser()"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520317179.61025"
+            timestampString = "520348185.01982"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "115"
-            endingLineNumber = "115"
+            startingLineNumber = "192"
+            endingLineNumber = "192"
             landmarkName = "checkIfUserLoggedIn()"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520317179.61025"
+            timestampString = "520348185.01982"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "118"
-            endingLineNumber = "118"
+            startingLineNumber = "195"
+            endingLineNumber = "195"
             landmarkName = "checkIfUserLoggedIn()"
             landmarkType = "7">
          </BreakpointContent>
@@ -136,12 +136,76 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520317179.61025"
+            timestampString = "520348185.01982"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "105"
-            endingLineNumber = "105"
+            startingLineNumber = "182"
+            endingLineNumber = "182"
             landmarkName = "logoutButtonPressed()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JustText/MainVC.swift"
+            timestampString = "520343506.986984"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "34"
+            endingLineNumber = "34"
+            landmarkName = "observeMessages()"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "JustText.MainVC.observeMessages () -&gt; ()"
+                  moduleName = "JustText"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/madhusudhanb.r/Desktop/ios/JustText/JustText/MainVC.swift"
+                  timestampString = "520320544.121397"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "30"
+                  endingLineNumber = "30"
+                  offsetFromSymbolStart = "270">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "JustText.MainVC.(observeMessages () -&gt; ()).(closure #1)"
+                  moduleName = "JustText"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/madhusudhanb.r/Desktop/ios/JustText/JustText/MainVC.swift"
+                  timestampString = "520320544.124674"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "31"
+                  endingLineNumber = "31"
+                  offsetFromSymbolStart = "19">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "JustText/MainVC.swift"
+            timestampString = "520348185.01982"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

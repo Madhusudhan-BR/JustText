@@ -12,6 +12,8 @@ import  Firebase
 class MainVC: UITableViewController
 {
     
+    let cellID = "cellID"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,9 +22,84 @@ class MainVC: UITableViewController
         self.navigationItem.leftBarButtonItem = button1
         checkIfUserLoggedIn()
         let image = UIImage(named: "icons8-Address Book-50")
-        
+        tableView.register(cell.self, forCellReuseIdentifier: cellID)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
+        observeMessages()
+    }
+    
+    var messages = [Message]()
+    var lastMessageDict = [String: Message]()
+    func observeMessages() {
+        let ref = Database.database().reference().child("Messages")
+        ref.observe(.childAdded, with: { (snapshot) in
+            if let messageDict = snapshot.value as? Dictionary<String, Any> {
+                let message = Message()
+                message._fromId = messageDict["fromId"] as! String
+                message._toId = messageDict["toId"] as! String
+                message._timestamp = messageDict["timestamp"] as! Int
+                message._text = messageDict["text"] as! String
+               // self.messages.append(message)
+                
+                if let toID = message._toId as? String {
+                    self.lastMessageDict[toID] = message
+                    self.messages = Array(self.lastMessageDict.values)
+                    self.messages.sort(by: { (message1, message2) -> Bool in
+                        return message1._timestamp! > message2._timestamp!
+                    })
+                    
+                }
+                
+                
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
+            }
+        }, withCancel: nil)
+    }
+    
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        return 1
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return messages.count
+    }
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 72
+    }
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+      //  let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         
+            let cell = tableView.dequeueReusableCell(withIdentifier: cellID, for: indexPath) as! cell
+        
+        var message = messages[indexPath.row]
+        
+        if let toId = message._toId {
+            let ref = Database.database().reference().child("users").child(toId)
+            ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let retrivedMessageDict = snapshot.value as? Dictionary<String,Any> {
+                    cell.textLabel?.text = retrivedMessageDict["name"] as! String
+                    
+                    if let profileImageUrl = retrivedMessageDict["profileImageUrl"] as? String {
+                        cell.profileImageView.loadImageFromCache(profileImageUrl: profileImageUrl)
+                    }
+                    
+                    if let seconds = message._timestamp{
+                        let timestamp = Date(timeIntervalSince1970: TimeInterval(seconds))
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "hh:mm:ss a"
+                        cell.timeLabel.text = dateFormatter.string(from: timestamp)
+                    }
+                    
+                }
+            }, withCancel: nil)
+        }
+        
+        cell.detailTextLabel?.text = message._text
+       // cell.textLabel?.text = message._toId
+        
+        return cell
     }
     
     func setupNavBar(user: User){
