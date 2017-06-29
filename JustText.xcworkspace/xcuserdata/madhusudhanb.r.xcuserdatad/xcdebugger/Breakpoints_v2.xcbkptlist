@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520348185.01982"
+            timestampString = "520398477.976847"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "205"
-            endingLineNumber = "205"
+            startingLineNumber = "268"
+            endingLineNumber = "268"
             landmarkName = "handleLoggedInUser()"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520348185.01982"
+            timestampString = "520398477.976847"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "188"
-            endingLineNumber = "188"
+            startingLineNumber = "251"
+            endingLineNumber = "251"
             landmarkName = "checkIfUserLoggedIn()"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520348185.01982"
+            timestampString = "520398477.976847"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "200"
-            endingLineNumber = "200"
+            startingLineNumber = "263"
+            endingLineNumber = "263"
             landmarkName = "handleLoggedInUser()"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520348185.01982"
+            timestampString = "520398477.976847"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "192"
-            endingLineNumber = "192"
+            startingLineNumber = "255"
+            endingLineNumber = "255"
             landmarkName = "checkIfUserLoggedIn()"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520348185.01982"
+            timestampString = "520398477.976847"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "195"
-            endingLineNumber = "195"
+            startingLineNumber = "258"
+            endingLineNumber = "258"
             landmarkName = "checkIfUserLoggedIn()"
             landmarkType = "7">
          </BreakpointContent>
@@ -136,11 +136,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520348185.01982"
+            timestampString = "520398477.976847"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "182"
-            endingLineNumber = "182"
+            startingLineNumber = "245"
+            endingLineNumber = "245"
             landmarkName = "logoutButtonPressed()"
             landmarkType = "7">
          </BreakpointContent>
@@ -152,11 +152,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520343506.986984"
+            timestampString = "520397304.484861"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "34"
-            endingLineNumber = "34"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
             landmarkName = "observeMessages()"
             landmarkType = "7">
             <Locations>
@@ -200,11 +200,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "JustText/MainVC.swift"
-            timestampString = "520348185.01982"
+            timestampString = "520398477.976847"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "88"
-            endingLineNumber = "88"
+            startingLineNumber = "146"
+            endingLineNumber = "146"
             landmarkName = "tableView(_:cellForRowAt:)"
             landmarkType = "7">
          </BreakpointContent>

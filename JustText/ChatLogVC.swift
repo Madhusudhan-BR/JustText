@@ -89,7 +89,23 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate {
             var fromiD = Auth.auth().currentUser!.uid
             let timestamp : Int = Int(NSDate().timeIntervalSince1970)
             let values = ["text" : inputText, "toId" : user?.id, "fromId" : fromiD, "timestamp" : timestamp] as [String : Any]
-            messages_ref.updateChildValues(values)
+            //messages_ref.updateChildValues(values) 
+            
+            messages_ref.updateChildValues(values, withCompletionBlock: { (error, ref) in
+                if error != nil {
+                    print(error)
+                    return
+                }
+                
+                let userMessagesRef = Database.database().reference().child("user-messages").child(fromiD)
+                let messageID = messages_ref.key
+                userMessagesRef.updateChildValues([messageID : 1])
+                
+                let receipientMessagesRef = Database.database().reference().child("user-messages").child(toID!)
+                receipientMessagesRef.updateChildValues([messageID: 1])
+                
+            })
+            
         }
     }
     

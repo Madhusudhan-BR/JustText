@@ -14,7 +14,7 @@ class cell : UITableViewCell {
     let timeLabel : UILabel = {
         let time = UILabel()
         time.translatesAutoresizingMaskIntoConstraints = false
-        time.text = "HH:MM::YY"
+        //time.text = "HH:MM::YY"
         time.font = UIFont.systemFont(ofSize: 12)
         time.textColor = UIColor.lightGray
         return time
@@ -23,7 +23,7 @@ class cell : UITableViewCell {
     let profileImageView : UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.layer.cornerRadius = 20
+        imageView.layer.cornerRadius = 24
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
         return imageView
@@ -54,6 +54,8 @@ class cell : UITableViewCell {
         timeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 18).isActive = true
         timeLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         timeLabel.heightAnchor.constraint(equalTo: (textLabel?.heightAnchor)!).isActive = true
+        
+        self.accessoryType = UITableViewCellAccessoryType.disclosureIndicator
     }
     
     required init?(coder aDecoder: NSCoder) {

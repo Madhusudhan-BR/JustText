@@ -24,12 +24,60 @@ class MainVC: UITableViewController
         let image = UIImage(named: "icons8-Address Book-50")
         tableView.register(cell.self, forCellReuseIdentifier: cellID)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
-        observeMessages()
+        observeUserMessages()
     }
     
     var messages = [Message]()
     var lastMessageDict = [String: Message]()
-    func observeMessages() {
+
+    
+    func observeUserMessages() {
+        
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        let ref = Database.database().reference().child("user-messages").child(uid)
+        ref.observe(.childAdded, with: { (snapshot) in
+            
+            //print(snapshot)
+            let messageID = snapshot.key
+            let msg_ref = Database.database().reference().child("Messages").child(messageID)
+            msg_ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                
+                
+                if let messageDict = snapshot.value as? Dictionary<String, Any> {
+                    let message = Message()
+                    message._fromId = messageDict["fromId"] as! String
+                    message._toId = messageDict["toId"] as! String
+                    message._timestamp = messageDict["timestamp"] as! Int
+                    message._text = messageDict["text"] as! String
+                    // self.messages.append(message)
+                    
+                    if let toID = message._toId as? String {
+                        self.lastMessageDict[toID] = message
+                        self.messages = Array(self.lastMessageDict.values)
+                        self.messages.sort(by: { (message1, message2) -> Bool in
+                            return message1._timestamp! > message2._timestamp!
+                        })
+                        
+                    }
+                    
+                    
+                    DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                    }
+                }
+
+                
+            })
+            
+            
+        }, withCancel: nil)
+        
+    }
+    
+            func observeMessages() {
         let ref = Database.database().reference().child("Messages")
         ref.observe(.childAdded, with: { (snapshot) in
             if let messageDict = snapshot.value as? Dictionary<String, Any> {
@@ -75,8 +123,18 @@ class MainVC: UITableViewController
         
         var message = messages[indexPath.row]
         
-        if let toId = message._toId {
-            let ref = Database.database().reference().child("users").child(toId)
+        let chatPartnerId : String?
+        
+        if Auth.auth().currentUser?.uid == message._fromId {
+            chatPartnerId = message._toId
+        }
+        else {
+            chatPartnerId = message._fromId
+        }
+        
+        
+        if let chatPartnerID = chatPartnerId {
+            let ref = Database.database().reference().child("users").child(chatPartnerID)
             ref.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let retrivedMessageDict = snapshot.value as? Dictionary<String,Any> {
                     cell.textLabel?.text = retrivedMessageDict["name"] as! String
@@ -104,6 +162,11 @@ class MainVC: UITableViewController
     
     func setupNavBar(user: User){
         // self.navigationItem.title = user.name
+        
+        messages.removeAll()
+        lastMessageDict.removeAll()
+        
+        observeUserMessages()
         
         let newtitleView = UIView()
         
