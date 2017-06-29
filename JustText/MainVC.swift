@@ -77,34 +77,34 @@ class MainVC: UITableViewController
         
     }
     
-            func observeMessages() {
-        let ref = Database.database().reference().child("Messages")
-        ref.observe(.childAdded, with: { (snapshot) in
-            if let messageDict = snapshot.value as? Dictionary<String, Any> {
-                let message = Message()
-                message._fromId = messageDict["fromId"] as! String
-                message._toId = messageDict["toId"] as! String
-                message._timestamp = messageDict["timestamp"] as! Int
-                message._text = messageDict["text"] as! String
-               // self.messages.append(message)
-                
-                if let toID = message._toId as? String {
-                    self.lastMessageDict[toID] = message
-                    self.messages = Array(self.lastMessageDict.values)
-                    self.messages.sort(by: { (message1, message2) -> Bool in
-                        return message1._timestamp! > message2._timestamp!
-                    })
-                    
-                }
-                
-                
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            }
-        }, withCancel: nil)
-    }
-    
+//            func observeMessages() {
+//        let ref = Database.database().reference().child("Messages")
+//        ref.observe(.childAdded, with: { (snapshot) in
+//            if let messageDict = snapshot.value as? Dictionary<String, Any> {
+//                let message = Message()
+//                message._fromId = messageDict["fromId"] as! String
+//                message._toId = messageDict["toId"] as! String
+//                message._timestamp = messageDict["timestamp"] as! Int
+//                message._text = messageDict["text"] as! String
+//               // self.messages.append(message)
+//                
+//                if let toID = message._toId as? String {
+//                    self.lastMessageDict[toID] = message
+//                    self.messages = Array(self.lastMessageDict.values)
+//                    self.messages.sort(by: { (message1, message2) -> Bool in
+//                        return message1._timestamp! > message2._timestamp!
+//                    })
+//                    
+//                }
+//                
+//                
+//                DispatchQueue.main.async {
+//                    self.tableView.reloadData()
+//                }
+//            }
+//        }, withCancel: nil)
+//    }
+//    
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -188,6 +188,7 @@ class MainVC: UITableViewController
         
         messages.removeAll()
         lastMessageDict.removeAll()
+        tableView.reloadData()
         
         observeUserMessages()
         
