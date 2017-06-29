@@ -80,6 +80,7 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         let message = messages[indexPath.row]
         cell.textView.text = message._text
         
+        cell.bubbleWidthAnchor?.constant = estimatedFrameForText(text: message._text!).width + 32
   
         
         return cell
