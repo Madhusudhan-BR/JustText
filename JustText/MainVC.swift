@@ -116,6 +116,36 @@ class MainVC: UITableViewController
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72
     }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        let message = messages[indexPath.row]
+        
+        if let chatpartnerID = message.chatPartnerId() {
+            
+            let ref = Database.database().reference().child("users").child(chatpartnerID)
+            
+            ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                
+                //print(snaphot.value)
+                
+                if let withUserDict = snapshot.value as? Dictionary<String, Any> {
+                    let user = User()
+                    user.name = withUserDict["name"] as! String
+                    user.id = chatpartnerID
+                    user.email = withUserDict["email"] as! String
+                    user.profileImageUrl = withUserDict["profileImageUrl"] as! String
+                    
+                    self.showChatVCWithUser(user: user)
+                }
+                
+            }, withCancel: nil)
+            
+        }
+        
+    }
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
       //  let cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cell")
         
@@ -123,17 +153,10 @@ class MainVC: UITableViewController
         
         var message = messages[indexPath.row]
         
-        let chatPartnerId : String?
-        
-        if Auth.auth().currentUser?.uid == message._fromId {
-            chatPartnerId = message._toId
-        }
-        else {
-            chatPartnerId = message._fromId
-        }
         
         
-        if let chatPartnerID = chatPartnerId {
+        
+        if let chatPartnerID = message.chatPartnerId() {
             let ref = Database.database().reference().child("users").child(chatPartnerID)
             ref.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let retrivedMessageDict = snapshot.value as? Dictionary<String,Any> {
