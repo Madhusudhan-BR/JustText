@@ -29,7 +29,7 @@ class MainVC: UITableViewController
     
     var messages = [Message]()
     var lastMessageDict = [String: Message]()
-
+     var timer : Timer?
     
     func observeUserMessages() {
         
@@ -64,11 +64,12 @@ class MainVC: UITableViewController
                         
                     }
                     
-                    self.timer?.invalidate()
-                    self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false )
                     
-                   
                 }
+                
+                self.timer?.invalidate()
+                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false )
+                
 
                 
             })
@@ -78,7 +79,7 @@ class MainVC: UITableViewController
         
     }
     
-    var timer : Timer?
+   
     
     func handleReload() {
         DispatchQueue.main.async {
