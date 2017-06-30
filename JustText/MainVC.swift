@@ -54,19 +54,20 @@ class MainVC: UITableViewController
                     message._text = messageDict["text"] as! String
                     // self.messages.append(message)
                     
-                    if let toID = message._toId as? String {
-                        self.lastMessageDict[toID] = message
+                    if let chatpartnerID = message.chatPartnerId() as? String {
+                        self.lastMessageDict[chatpartnerID] = message
                         self.messages = Array(self.lastMessageDict.values)
+                        
                         self.messages.sort(by: { (message1, message2) -> Bool in
                             return message1._timestamp! > message2._timestamp!
                         })
                         
                     }
                     
+                    self.timer?.invalidate()
+                    self.timer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false )
                     
-                    DispatchQueue.main.async {
-                        self.tableView.reloadData()
-                    }
+                   
                 }
 
                 
@@ -77,6 +78,14 @@ class MainVC: UITableViewController
         
     }
     
+    var timer : Timer?
+    
+    func handleReload() {
+        DispatchQueue.main.async {
+            print("reloaded")
+            self.tableView.reloadData()
+        }
+    }
 //            func observeMessages() {
 //        let ref = Database.database().reference().child("Messages")
 //        ref.observe(.childAdded, with: { (snapshot) in
@@ -161,7 +170,7 @@ class MainVC: UITableViewController
             ref.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let retrivedMessageDict = snapshot.value as? Dictionary<String,Any> {
                     cell.textLabel?.text = retrivedMessageDict["name"] as! String
-                    
+                    print(cell.textLabel?.text)
                     if let profileImageUrl = retrivedMessageDict["profileImageUrl"] as? String {
                         cell.profileImageView.loadImageFromCache(profileImageUrl: profileImageUrl)
                     }

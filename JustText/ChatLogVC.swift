@@ -62,12 +62,17 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        collectionView?.contentInset = UIEdgeInsets(top: 8, left: 0, bottom: 58, right: 0)
+        collectionView?.scrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         collectionView?.backgroundColor = UIColor.white
         collectionView?.delegate = self
         collectionView?.register(ChatMessageCell.self, forCellWithReuseIdentifier: cellID)
         collectionView?.alwaysBounceVertical = true
         setupInputComponents()
+    }
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        collectionView?.collectionViewLayout.invalidateLayout()
     }
     
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -79,6 +84,24 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         
         let message = messages[indexPath.row]
         cell.textView.text = message._text
+        
+        if let profileImageUrl = user?.profileImageUrl {
+            cell.profileImageView.loadImageFromCache(profileImageUrl: profileImageUrl)
+        }
+        
+        if message._fromId == Auth.auth().currentUser?.uid {
+            cell.bubbleView.backgroundColor = UIColor(red: 0, green: 137/255, blue: 249/255, alpha: 1)
+            cell.textView.textColor = UIColor.white
+            cell.profileImageView.isHidden = true
+            cell.bubbleRightAnchor?.isActive = true
+            cell.bubbleLeftAnchor?.isActive = false
+        }
+        else {
+            cell.bubbleView.backgroundColor = UIColor(red: 240/255, green: 240/255, blue: 240/255, alpha: 1)
+            cell.textView.textColor = UIColor.black
+            cell.bubbleRightAnchor?.isActive = false
+            cell.bubbleLeftAnchor?.isActive = true
+        }
         
         cell.bubbleWidthAnchor?.constant = estimatedFrameForText(text: message._text!).width + 32
   
@@ -164,7 +187,7 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         
         let messages_ref = Database.database().reference().child("Messages").childByAutoId()
         
-        if let inputText = inputTextFiled.text {
+        if let inputText = inputTextFiled.text, inputTextFiled.text != ""  {
             var toID = user?.id
             var fromiD = Auth.auth().currentUser!.uid
             let timestamp : Int = Int(NSDate().timeIntervalSince1970)
@@ -176,6 +199,7 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
                     print(error)
                     return
                 }
+                self.inputTextFiled.text = ""
                 
                 let userMessagesRef = Database.database().reference().child("user-messages").child(fromiD)
                 let messageID = messages_ref.key
