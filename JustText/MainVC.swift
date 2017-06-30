@@ -41,38 +41,49 @@ class MainVC: UITableViewController
         ref.observe(.childAdded, with: { (snapshot) in
             
             //print(snapshot)
-            let messageID = snapshot.key
-            let msg_ref = Database.database().reference().child("Messages").child(messageID)
-            msg_ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            let userID = snapshot.key
+            
+            Database.database().reference().child("user-messages").child(uid).child(userID).observe(.childAdded, with: { (snapshotMessage) in
+                
+                let messageID = snapshotMessage.key
                 
                 
-                if let messageDict = snapshot.value as? Dictionary<String, Any> {
-                    let message = Message()
-                    message._fromId = messageDict["fromId"] as! String
-                    message._toId = messageDict["toId"] as! String
-                    message._timestamp = messageDict["timestamp"] as! Int
-                    message._text = messageDict["text"] as! String
-                    // self.messages.append(message)
+                let msg_ref = Database.database().reference().child("Messages").child(messageID)
+                msg_ref.observeSingleEvent(of: .value, with: { (snapshot) in
                     
-                    if let chatpartnerID = message.chatPartnerId() as? String {
-                        self.lastMessageDict[chatpartnerID] = message
-                        self.messages = Array(self.lastMessageDict.values)
+                    
+                    if let messageDict = snapshot.value as? Dictionary<String, Any> {
+                        let message = Message()
+                        message._fromId = messageDict["fromId"] as! String
+                        message._toId = messageDict["toId"] as! String
+                        message._timestamp = messageDict["timestamp"] as! Int
+                        message._text = messageDict["text"] as! String
+                        // self.messages.append(message)
                         
-                        self.messages.sort(by: { (message1, message2) -> Bool in
-                            return message1._timestamp! > message2._timestamp!
-                        })
+                        if let chatpartnerID = message.chatPartnerId() as? String {
+                            self.lastMessageDict[chatpartnerID] = message
+                            
+                            
+                        }
+                        
                         
                     }
                     
+                    self.timer?.invalidate()
+                    self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false )
                     
-                }
+                    
+                    
+                })
                 
-                self.timer?.invalidate()
-                self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false )
                 
-
                 
-            })
+            }, withCancel: nil)
+            
+            
+            
+            
+          
             
             
         }, withCancel: nil)
@@ -82,6 +93,11 @@ class MainVC: UITableViewController
    
     
     func handleReload() {
+        self.messages = Array(self.lastMessageDict.values)
+        
+        self.messages.sort(by: { (message1, message2) -> Bool in
+            return message1._timestamp! > message2._timestamp!
+        })
         DispatchQueue.main.async {
             print("reloaded")
             self.tableView.reloadData()

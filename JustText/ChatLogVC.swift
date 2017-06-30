@@ -10,9 +10,10 @@ import UIKit
 import Firebase
 
 
-class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionViewDelegateFlowLayout {
+class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     let inputTextFiled = UITextField()
+    
     var user : User? {
         didSet{
             navigationItem.title = user?.name
@@ -24,10 +25,10 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
     var messages =  [Message]()
     
     func observeMessages(){
-        guard  let uid = Auth.auth().currentUser?.uid  else {
+        guard  let uid = Auth.auth().currentUser?.uid, let toID = user?.id  else {
             return
         }
-        let ref = Database.database().reference().child("user-messages").child(uid)
+        let ref = Database.database().reference().child("user-messages").child(uid).child(toID)
         ref.observe(.childAdded, with: { (snapshot) in
             let messageID = snapshot.key
             let messages_ref = Database.database().reference().child("Messages").child(messageID)
@@ -86,6 +87,19 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         //containerView.backgroundColor = UIColor.brown
         containerView.backgroundColor = UIColor.white
         
+        let uploadImageView = UIImageView()
+        uploadImageView.image = UIImage(named: "ic_insert_photo_48pt")
+        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(uploadImageView)
+        
+        //constraints 
+        
+        uploadImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        uploadImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleUploadPic)))
+        uploadImageView.isUserInteractionEnabled = true
+        uploadImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        uploadImageView.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        uploadImageView.heightAnchor.constraint(equalToConstant: 44).isActive = true
         
         let sendButton = UIButton(type:  .system)
         sendButton.translatesAutoresizingMaskIntoConstraints = false
@@ -107,7 +121,7 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         
         //constraints for inputtextfield
         
-        self.inputTextFiled.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8).isActive = true
+        self.inputTextFiled.leftAnchor.constraint(equalTo: uploadImageView.rightAnchor, constant: 8).isActive = true
         self.inputTextFiled.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
         self.inputTextFiled.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         self.inputTextFiled.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
@@ -127,6 +141,35 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         
         return containerView
     }()
+    
+    func handleUploadPic() {
+        let picker = UIImagePickerController()
+        picker.delegate = self
+        picker.allowsEditing = true 
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        var imageSelectedFromPicker: UIImage?
+        
+        if let editedImage = info["UIImagePickerControllerEditedImage"] as? UIImage {
+            imageSelectedFromPicker = editedImage
+        } else if let originalImage = info["UIImagePickerControllerOriginalImage"] as? UIImage {
+            imageSelectedFromPicker = originalImage
+        }
+        
+        if let selectedImage = imageSelectedFromPicker {
+            //profileImage.image = selectedImage
+        }
+        
+        dismiss(animated: true, completion: nil)
+        
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
     
     override var inputAccessoryView: UIView?  {
         get {
@@ -212,7 +255,9 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
             height = estimatedFrameForText(text: text).height + 20
         }
         
-        return CGSize(width: view.frame.width, height: height)
+        let width = UIScreen.main.bounds.width
+        
+        return CGSize(width: width, height: height)
     }
     
     func estimatedFrameForText(text: String) -> CGRect {
@@ -301,11 +346,11 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
                 }
                 self.inputTextFiled.text = ""
                 
-                let userMessagesRef = Database.database().reference().child("user-messages").child(fromiD)
+                let userMessagesRef = Database.database().reference().child("user-messages").child(fromiD).child(toID!)
                 let messageID = messages_ref.key
                 userMessagesRef.updateChildValues([messageID : 1])
                 
-                let receipientMessagesRef = Database.database().reference().child("user-messages").child(toID!)
+                let receipientMessagesRef = Database.database().reference().child("user-messages").child(toID!).child(fromiD)
                 receipientMessagesRef.updateChildValues([messageID: 1])
                 
             })
