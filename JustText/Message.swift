@@ -15,6 +15,7 @@ class Message : NSObject {
     var _fromId: String?
     var _timestamp: Int?
     var _text:String?
+    var downloadUrl: String?
     
     func chatPartnerId() -> String? {
     

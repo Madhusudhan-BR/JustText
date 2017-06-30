@@ -23,6 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window?.rootViewController = UINavigationController(rootViewController: MainVC())
         
         FirebaseApp.configure()
+        Database.database().isPersistenceEnabled = true
         
         return true
     }

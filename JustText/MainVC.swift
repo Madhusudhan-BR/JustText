@@ -54,10 +54,10 @@ class MainVC: UITableViewController
                     
                     if let messageDict = snapshot.value as? Dictionary<String, Any> {
                         let message = Message()
-                        message._fromId = messageDict["fromId"] as! String
-                        message._toId = messageDict["toId"] as! String
-                        message._timestamp = messageDict["timestamp"] as! Int
-                        message._text = messageDict["text"] as! String
+                        message._fromId = messageDict["fromId"] as? String
+                        message._toId = messageDict["toId"] as? String
+                        message._timestamp = messageDict["timestamp"] as? Int
+                        message._text = messageDict["text"] as? String
                         // self.messages.append(message)
                         
                         if let chatpartnerID = message.chatPartnerId() as? String {

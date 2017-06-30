@@ -38,10 +38,12 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
                 }
                 
                 let message = Message()
-                message._fromId = messageDict["fromId"] as! String
-                message._text = messageDict["text"] as! String
-                message._toId  = messageDict["toId"] as! String
-                message._timestamp = messageDict["timestamp"] as! Int
+                message._fromId = messageDict["fromId"] as? String
+                message._text = messageDict["text"] as? String
+                message._toId  = messageDict["toId"] as? String
+                message._timestamp = messageDict["timestamp"] as? Int
+                message.downloadUrl = messageDict["downloadUrl"] as? String
+                
                 
                 if message.chatPartnerId() == self.user?.id {
                     self.messages.append(message)
@@ -161,9 +163,64 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         
         if let selectedImage = imageSelectedFromPicker {
             //profileImage.image = selectedImage
+            uploadImageToFirebaseDB(image : selectedImage)
         }
         
         dismiss(animated: true, completion: nil)
+        
+    }
+    
+    func uploadImageToFirebaseDB(image : UIImage) {
+        let imageName = NSUUID().uuidString
+        
+        let ref = Storage.storage().reference().child("message_images").child(imageName)
+        
+        if let uploadData = UIImageJPEGRepresentation(image, 0.1) {
+        ref.putData(uploadData, metadata: nil) { (metadata, error) in
+            
+            
+            if error != nil {
+                print(error)
+                return
+            }
+            
+            if let downloadURL = metadata?.downloadURL()?.absoluteString {
+                
+                self.uploadMessageWithImageUrl(url : downloadURL)
+            }
+            
+            
+        }
+        }
+        
+    }
+
+    func uploadMessageWithImageUrl(url : String){
+        let messages_ref = Database.database().reference().child("Messages").childByAutoId()
+        
+        
+            var toID = user?.id
+            var fromiD = Auth.auth().currentUser!.uid
+            let timestamp : Int = Int(NSDate().timeIntervalSince1970)
+            let values = ["downloadUrl" : url, "toId" : user?.id, "fromId" : fromiD, "timestamp" : timestamp] as [String : Any]
+            //messages_ref.updateChildValues(values)
+            
+            messages_ref.updateChildValues(values, withCompletionBlock: { (error, ref) in
+                if error != nil {
+                    print(error)
+                    return
+                }
+                self.inputTextFiled.text = ""
+                
+                let userMessagesRef = Database.database().reference().child("user-messages").child(fromiD).child(toID!)
+                let messageID = messages_ref.key
+                userMessagesRef.updateChildValues([messageID : 1])
+                
+                let receipientMessagesRef = Database.database().reference().child("user-messages").child(toID!).child(fromiD)
+                receipientMessagesRef.updateChildValues([messageID: 1])
+                
+            })
+            
         
     }
     
@@ -242,7 +299,17 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
             cell.bubbleLeftAnchor?.isActive = true
         }
         
-        cell.bubbleWidthAnchor?.constant = estimatedFrameForText(text: message._text!).width + 32
+        if let text = message._text {
+            cell.bubbleWidthAnchor?.constant = estimatedFrameForText(text: text).width + 32
+        }
+        
+        if let imageURL = message.downloadUrl {
+            cell.messageImageView.loadImageFromCache(profileImageUrl: imageURL)
+            cell.messageImageView.isHidden = false
+            cell.bubbleView.backgroundColor = UIColor.clear 
+        } else {
+            cell.messageImageView.isHidden = true
+        }
   
         
         return cell

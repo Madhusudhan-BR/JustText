@@ -13,7 +13,8 @@ class ChatMessageCell: UICollectionViewCell {
         let tv = UITextView()
         tv.textColor = UIColor.white
         tv.backgroundColor = UIColor.clear
-        tv.text = "Some text"
+        //tv.text = "Some text"
+        tv.isEditable = false
         tv.translatesAutoresizingMaskIntoConstraints = false
         tv.font = UIFont.systemFont(ofSize: 16)
         return tv
@@ -30,13 +31,25 @@ class ChatMessageCell: UICollectionViewCell {
     
     let profileImageView : UIImageView = {
         let imageView = UIImageView()
-        imageView.backgroundColor = UIColor.black
+        //imageView.backgroundColor = UIColor.black
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.layer.cornerRadius = 16
         imageView.contentMode = .scaleAspectFit
         imageView.layer.masksToBounds = true
         return imageView
     }()
+    
+    let messageImageView : UIImageView = {
+        let imageView = UIImageView()
+        //imageView.backgroundColor = UIColor.black
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.layer.cornerRadius = 16
+        imageView.contentMode = .scaleAspectFit
+        //imageView.backgroundColor = UIColor.blue
+        imageView.layer.masksToBounds = true
+        return imageView
+    }()
+    
     
     var bubbleWidthAnchor: NSLayoutConstraint?
     var bubbleRightAnchor: NSLayoutConstraint?
@@ -49,6 +62,12 @@ class ChatMessageCell: UICollectionViewCell {
         addSubview(bubbleView)
         addSubview(textView)
         addSubview(profileImageView)
+        
+        bubbleView.addSubview(messageImageView)
+        messageImageView.leftAnchor.constraint(equalTo: bubbleView.leftAnchor).isActive = true
+        messageImageView.topAnchor.constraint(equalTo: bubbleView.topAnchor).isActive = true
+        messageImageView.widthAnchor.constraint(equalTo: bubbleView.widthAnchor).isActive = true
+        messageImageView.heightAnchor.constraint(equalTo: bubbleView.heightAnchor).isActive = true
         
         profileImageView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 8).isActive = true
         profileImageView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
