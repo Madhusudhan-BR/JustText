@@ -37,13 +37,13 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
                     return
                 }
                 
-                let message = Message()
-                message._fromId = messageDict["fromId"] as? String
-                message._text = messageDict["text"] as? String
-                message._toId  = messageDict["toId"] as? String
-                message._timestamp = messageDict["timestamp"] as? Int
-                message.downloadUrl = messageDict["downloadUrl"] as? String
-                
+                let message = Message(dictionary : messageDict)
+//                message._fromId = messageDict["fromId"] as? String
+//                message._text = messageDict["text"] as? String
+//                message._toId  = messageDict["toId"] as? String
+//                message._timestamp = messageDict["timestamp"] as? Int
+//                message.downloadUrl = messageDict["downloadUrl"] as? String
+//                
                 
                 if message.chatPartnerId() == self.user?.id {
                     self.messages.append(message)
@@ -186,7 +186,7 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
             
             if let downloadURL = metadata?.downloadURL()?.absoluteString {
                 
-                self.uploadMessageWithImageUrl(url : downloadURL)
+                self.uploadMessageWithImageUrl(url : downloadURL, image: image)
             }
             
             
@@ -195,14 +195,14 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         
     }
 
-    func uploadMessageWithImageUrl(url : String){
+    func uploadMessageWithImageUrl(url : String, image: UIImage){
         let messages_ref = Database.database().reference().child("Messages").childByAutoId()
         
         
             var toID = user?.id
             var fromiD = Auth.auth().currentUser!.uid
             let timestamp : Int = Int(NSDate().timeIntervalSince1970)
-            let values = ["downloadUrl" : url, "toId" : user?.id, "fromId" : fromiD, "timestamp" : timestamp] as [String : Any]
+        let values = [ "toId" : user?.id, "fromId" : fromiD, "timestamp" : timestamp , "downloadUrl" : url, "imageHeight" : image.size.height, "imageWidth" : image.size.width] as [String : Any]
             //messages_ref.updateChildValues(values)
             
             messages_ref.updateChildValues(values, withCompletionBlock: { (error, ref) in
@@ -279,13 +279,13 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellID, for: indexPath) as! ChatMessageCell
         
         let message = messages[indexPath.row]
-        cell.textView.text = message._text
+        cell.textView.text = message.text
         
         if let profileImageUrl = user?.profileImageUrl {
             cell.profileImageView.loadImageFromCache(profileImageUrl: profileImageUrl)
         }
         
-        if message._fromId == Auth.auth().currentUser?.uid {
+        if message.fromId == Auth.auth().currentUser?.uid {
             cell.bubbleView.backgroundColor = UIColor(red: 0, green: 137/255, blue: 249/255, alpha: 1)
             cell.textView.textColor = UIColor.white
             cell.profileImageView.isHidden = true
@@ -299,8 +299,10 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
             cell.bubbleLeftAnchor?.isActive = true
         }
         
-        if let text = message._text {
+        if let text = message.text {
             cell.bubbleWidthAnchor?.constant = estimatedFrameForText(text: text).width + 32
+        } else if message.downloadUrl != nil {
+            cell.bubbleWidthAnchor?.constant = 200
         }
         
         if let imageURL = message.downloadUrl {
@@ -318,8 +320,12 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         var height: CGFloat = 80
         
-        if let text = messages[indexPath.row]._text {
+        let message = messages[indexPath.row]
+        
+        if let text = message.text {
             height = estimatedFrameForText(text: text).height + 20
+        } else if let imageHeight = message.imageHeight?.floatValue, let imageWidth = message.imageWidth?.floatValue {
+            height = CGFloat(imageHeight / imageWidth * 200)
         }
         
         let width = UIScreen.main.bounds.width

@@ -53,11 +53,11 @@ class MainVC: UITableViewController
                     
                     
                     if let messageDict = snapshot.value as? Dictionary<String, Any> {
-                        let message = Message()
-                        message._fromId = messageDict["fromId"] as? String
-                        message._toId = messageDict["toId"] as? String
-                        message._timestamp = messageDict["timestamp"] as? Int
-                        message._text = messageDict["text"] as? String
+                        let message = Message(dictionary: messageDict)
+//                        message._fromId = messageDict["fromId"] as? String
+//                        message._toId = messageDict["toId"] as? String
+//                        message._timestamp = messageDict["timestamp"] as? Int
+//                        message._text = messageDict["text"] as? String
                         // self.messages.append(message)
                         
                         if let chatpartnerID = message.chatPartnerId() as? String {
@@ -96,7 +96,7 @@ class MainVC: UITableViewController
         self.messages = Array(self.lastMessageDict.values)
         
         self.messages.sort(by: { (message1, message2) -> Bool in
-            return message1._timestamp! > message2._timestamp!
+            return message1.timestamp! > message2.timestamp!
         })
         DispatchQueue.main.async {
             print("reloaded")
@@ -192,7 +192,7 @@ class MainVC: UITableViewController
                         cell.profileImageView.loadImageFromCache(profileImageUrl: profileImageUrl)
                     }
                     
-                    if let seconds = message._timestamp{
+                    if let seconds = message.timestamp{
                         let timestamp = Date(timeIntervalSince1970: TimeInterval(seconds))
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "hh:mm:ss a"
@@ -203,7 +203,7 @@ class MainVC: UITableViewController
             }, withCancel: nil)
         }
         
-        cell.detailTextLabel?.text = message._text
+        cell.detailTextLabel?.text = message.text
        // cell.textLabel?.text = message._toId
         
         return cell

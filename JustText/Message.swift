@@ -11,24 +11,41 @@ import Firebase
 
 
 class Message : NSObject {
-    var _toId : String?
-    var _fromId: String?
-    var _timestamp: Int?
-    var _text:String?
+    var toId : String?
+    var fromId: String?
+    var timestamp: Int?
+    var text:String?
     var downloadUrl: String?
+    var imageHeight: NSNumber?
+    var imageWidth: NSNumber?
     
     func chatPartnerId() -> String? {
-    
+        
         var chatPartnerId : String?
-    if Auth.auth().currentUser?.uid == _fromId {
-    chatPartnerId = _toId!
-    }
-    else {
-    chatPartnerId = _fromId!
-    }
-    
+        if Auth.auth().currentUser?.uid == fromId {
+            chatPartnerId = toId!
+        }
+        else {
+            chatPartnerId = fromId!
+        }
+        
         return chatPartnerId
- 
-    
+        
+        
     }
+    
+     init(dictionary: [String: Any]) {
+        super.init()
+        
+        toId = dictionary["toId"] as? String
+        fromId = dictionary["fromId"] as? String
+        timestamp = dictionary["timestamp"] as? Int
+        text = dictionary["text"] as? String
+        downloadUrl = dictionary["downloadUrl"] as? String
+        imageHeight = dictionary["imageHeight"] as? NSNumber
+        imageWidth = dictionary["imageWidth"] as? NSNumber
+        
+        
+    }
+    
 }
