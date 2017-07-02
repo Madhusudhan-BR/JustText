@@ -89,7 +89,7 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
     
     lazy var profileImage: UIImageView = {
         let img = UIImageView()
-        img.image = UIImage(named: "Group")
+        img.image = UIImage(named: "addpic")
         img.translatesAutoresizingMaskIntoConstraints = false
         img.contentMode = .scaleAspectFill
         img.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTapped)))
@@ -263,6 +263,7 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
         
         guard  let email = emailTextField.text, let password = passwordTextField.text else {
             print("MADHU: Invalid data! ")
+             self.createAlert(title: "Error", message: "Invalid Data")
             return
         }
         
@@ -271,7 +272,7 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
             
             if error != nil {
                 print(error)
-                
+                self.createAlert(title: "Error", message: (error?.localizedDescription)!)
                 return 
             }
             
@@ -289,6 +290,8 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
         
         guard let name = nameTextField.text, let email = emailTextField.text, let password = passwordTextField.text else {
             print("MADHU: Invalid data! ")
+            self.createAlert(title: "Error", message: "Invalid Data")
+
            return
         }
         
@@ -296,6 +299,8 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
           
             if error != nil {
                 print("MADHU : \(error.debugDescription)")
+                self.createAlert(title: "Error", message: (error?.localizedDescription)!)
+
                 return
             }
             
@@ -364,5 +369,16 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
         return .lightContent
     }
     
+    func createAlert(title: String, message: String) {
+        let alert = UIAlertController(
+            title: title,
+            message: message,
+            preferredStyle: UIAlertControllerStyle.alert
+        )
+        
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        
+        present(alert, animated: true, completion: nil)
+    }
 
 }

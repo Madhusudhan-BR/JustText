@@ -238,7 +238,14 @@ class MainVC: UITableViewController
             }, withCancel: nil)
         }
         
-        cell.detailTextLabel?.text = message.text
+        if let text = message.text {
+            cell.detailTextLabel?.text = message.text
+        } else {
+            cell.detailTextLabel?.text = "image"
+        }
+        
+        
+        
        // cell.textLabel?.text = message._toId
         
         return cell
