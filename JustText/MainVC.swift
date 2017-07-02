@@ -25,6 +25,36 @@ class MainVC: UITableViewController
         tableView.register(cell.self, forCellReuseIdentifier: cellID)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
         observeUserMessages()
+        
+        tableView.allowsMultipleSelectionDuringEditing = true
+        
+    }
+    
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        let message = messages[indexPath.row]
+        if let chatpartnerId = message.chatPartnerId() {
+            Database.database().reference().child("user-messages").child(uid).child(chatpartnerId).removeValue(completionBlock: { (error, ref) in
+                if error != nil {
+                    print(error)
+                    return
+                }
+                
+                self.lastMessageDict.removeValue(forKey: chatpartnerId)
+                self.handleReload()
+
+                
+            })
+        }
+        
     }
     
     var messages = [Message]()
@@ -82,7 +112,12 @@ class MainVC: UITableViewController
             
             
             
-            
+            ref.observe(.childRemoved, with: { (snapshot) in
+                
+                self.lastMessageDict.removeValue(forKey: snapshot.key)
+                self.handleReload()
+                
+            }, withCancel: nil)
           
             
             

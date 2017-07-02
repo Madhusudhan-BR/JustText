@@ -78,7 +78,7 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         collectionView?.alwaysBounceVertical = true
 //        
 //        setupInputComponents()
-//        setupKeyboardObservers()
+     setupKeyboardObservers()
         
     }
     
@@ -244,8 +244,16 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
     }
     
     func setupKeyboardObservers()  {
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardWillHide), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleKeyboardDidShow), name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+    }
+    
+    func handleKeyboardDidShow() {
+        if messages.count > 0 {
+            let indexpath = NSIndexPath(item: messages.count - 1 , section: 0 )
+            collectionView?.scrollToItem(at: indexpath as IndexPath, at: .top, animated: true)
+        }
     }
     
     func handleKeyboardWillShow(notification: NSNotification) {
@@ -285,6 +293,8 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         let message = messages[indexPath.row]
         cell.textView.text = message.text
         
+        cell.chatLogVC = self
+        
         if let profileImageUrl = user?.profileImageUrl {
             cell.profileImageView.loadImageFromCache(profileImageUrl: profileImageUrl)
         }
@@ -312,9 +322,11 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         if let imageURL = message.downloadUrl {
             cell.messageImageView.loadImageFromCache(profileImageUrl: imageURL)
             cell.messageImageView.isHidden = false
+            cell.textView.isHidden = true
             cell.bubbleView.backgroundColor = UIColor.clear 
         } else {
             cell.messageImageView.isHidden = true
+            cell.textView.isHidden = false
         }
   
         
@@ -439,4 +451,68 @@ class ChatLogVC: UICollectionViewController,UITextFieldDelegate,UICollectionView
         handleSend()
         return true
     }
+    
+    var startingFrame : CGRect?
+    var blackBG:UIView?
+    
+    func performZoom(imageView : UIImageView){
+        print("Perform zooooooom")
+        
+        startingFrame = imageView.superview?.convert(imageView.frame, to: nil)
+        
+        let zoomImageView = UIImageView(frame: startingFrame!)
+        zoomImageView.image = imageView.image
+        zoomImageView.layer.cornerRadius = 16
+        zoomImageView.clipsToBounds = true
+        zoomImageView.isUserInteractionEnabled = true
+        
+        zoomImageView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleZoomOut)))
+        
+        
+        if let keyWindow = UIApplication.shared.keyWindow {
+            blackBG = UIView(frame: keyWindow.frame)
+            blackBG?.backgroundColor = UIColor.black
+            blackBG?.alpha = 0
+            
+            keyWindow.addSubview(blackBG!)
+            
+            keyWindow.addSubview(zoomImageView)
+            
+            UIView.animate(withDuration: 0.5, animations: {
+                
+                self.blackBG?.alpha = 1
+                self.inputContainerView.alpha = 0
+
+                
+                let height = (self.startingFrame?.height)! / (self.startingFrame?.width)! * keyWindow.frame.width
+                
+                zoomImageView.frame = CGRect(x: 0, y: 0, width: keyWindow.frame.width, height: height)
+                zoomImageView.center = keyWindow.center
+                zoomImageView.layer.cornerRadius = 0
+                
+            }, completion: nil)
+            
+        }
+        
+    }
+    
+    func handleZoomOut(gesture : UITapGestureRecognizer){
+        
+        if let zoomOutImageView = gesture.view {
+            UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
+                
+                zoomOutImageView.layer.cornerRadius = 16
+                zoomOutImageView.clipsToBounds = true
+                zoomOutImageView.frame = self.startingFrame!
+                self.blackBG?.alpha = 0
+                self.inputContainerView.alpha = 1
+            }, completion: { (completed ) in
+                zoomOutImageView.removeFromSuperview()
+                
+                
+            })
+        }
+        
+    }
+    
 }

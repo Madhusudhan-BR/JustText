@@ -11,6 +11,7 @@ import UIKit
 class cell : UITableViewCell {
     
     
+    
     let timeLabel : UILabel = {
         let time = UILabel()
         time.translatesAutoresizingMaskIntoConstraints = false
