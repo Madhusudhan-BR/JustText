@@ -8,6 +8,7 @@
 
 import  UIKit
 import  Firebase
+import UserNotifications 
 
 class MainVC: UITableViewController
 {
@@ -21,11 +22,13 @@ class MainVC: UITableViewController
         let button1 = UIBarButtonItem(title: "Logout", style: .plain , target: self, action: #selector(logoutButtonPressed))
         self.navigationItem.leftBarButtonItem = button1
         checkIfUserLoggedIn()
-        let image = UIImage(named: "icons8-Address Book-50")
+        let image = UIImage(named: "plus")
+        
         tableView.register(cell.self, forCellReuseIdentifier: cellID)
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: image, style: .plain, target: self, action: #selector(handleNewMessage))
-        observeUserMessages()
         
+        observeUserMessages()
+        observeUserMessagesNotifications()
         tableView.allowsMultipleSelectionDuringEditing = true
         
     }
@@ -93,6 +96,16 @@ class MainVC: UITableViewController
                         if let chatpartnerID = message.chatPartnerId() as? String {
                             self.lastMessageDict[chatpartnerID] = message
                             
+//                            self.sendUserNotification(message: message, completion: {success in
+//                                if success {
+//                                print("Successful")
+//                                }
+//                                else {
+//                                print("Not successful")
+//                                }
+//                                
+//                            })
+
                             
                         }
                         
@@ -125,6 +138,94 @@ class MainVC: UITableViewController
         
     }
     
+    func observeUserMessagesNotifications() {
+        
+        guard let uid = Auth.auth().currentUser?.uid else {
+            return
+        }
+        
+        let ref = Database.database().reference().child("user-messages").child(uid)
+        ref.observe(.childAdded, with: { (snapshot) in
+            
+            //print(snapshot)
+            let userID = snapshot.key
+            
+            Database.database().reference().child("user-messages").child(uid).child(userID).observe(.childAdded, with: { (snapshotMessage) in
+                
+                let messageID = snapshotMessage.key
+                
+                
+                let msg_ref = Database.database().reference().child("Messages").child(messageID)
+                msg_ref.observeSingleEvent(of: .value, with: { (snapshot) in
+                    
+                    
+                    if let messageDict = snapshot.value as? Dictionary<String, Any> {
+                        let message = Message(dictionary: messageDict)
+                        //                        message._fromId = messageDict["fromId"] as? String
+                        //                        message._toId = messageDict["toId"] as? String
+                        //                        message._timestamp = messageDict["timestamp"] as? Int
+                        //                        message._text = messageDict["text"] as? String
+                        // self.messages.append(message)
+                        
+                        if let chatpartnerID = message.chatPartnerId() as? String {
+                            //self.lastMessageDict[chatpartnerID] = message
+                            
+                            var username: String?
+                            
+                            if let chatpartnerID = message.chatPartnerId() {
+                                let ref = Database.database().reference().child("users").child(chatpartnerID).observeSingleEvent(of: .value, with: { (snapshot) in
+                                    
+                                    //print("MADHU: ", snapshot)
+                                    if let dict = snapshot.value as? Dictionary<String,AnyObject> {
+                                        username = dict["name"] as? String
+                                        self.sendUserNotification(username: username, message: message, completion: {success in
+                                            if success {
+                                                print("Successful")
+                                            }
+                                            else {
+                                                print("Not successful")
+                                            }
+                                            
+                                        })
+                                    }
+                                    
+                                })
+                            }
+                            
+                          
+                            
+                            
+                        }
+                        
+                        
+                    }
+                    
+//                    self.timer?.invalidate()
+//                    self.timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.handleReload), userInfo: nil, repeats: false )
+//                    
+//                    
+                    
+                })
+                
+                
+                
+            }, withCancel: nil)
+            
+            
+            
+//            ref.observe(.childRemoved, with: { (snapshot) in
+//                
+//                self.lastMessageDict.removeValue(forKey: snapshot.key)
+//                self.handleReload()
+//                
+//            }, withCancel: nil)
+//            
+            
+            
+        }, withCancel: nil)
+        
+    }
+
    
     
     func handleReload() {
@@ -249,6 +350,35 @@ class MainVC: UITableViewController
        // cell.textLabel?.text = message._toId
         
         return cell
+    }
+    
+    func sendUserNotification(username: String?, message : Message, completion : @escaping ( _ Success : Bool) -> ()) {
+        let notification = UNMutableNotificationContent()
+                notification.title = "New Message"
+        
+        
+        
+        if let subtitle = username, let text = message.text {
+            notification.subtitle = subtitle
+            notification.body = text
+        }
+        
+        let notidicationTrigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let notificationReq = UNNotificationRequest(identifier: "myNotif", content: notification, trigger: notidicationTrigger)
+        UNUserNotificationCenter.current().add(notificationReq) { (error) in
+            
+            
+            if error != nil {
+                print(error)
+                completion(false)
+                return
+            }
+            else {
+                completion(true)
+            }
+            
+        }
+        
     }
     
     func setupNavBar(user: User){

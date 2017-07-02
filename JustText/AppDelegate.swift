@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import Firebase
+import  UserNotifications
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -21,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.makeKeyAndVisible()
         window?.rootViewController = UINavigationController(rootViewController: MainVC())
-        
+        UNUserNotificationCenter.current().delegate = self 
         FirebaseApp.configure()
         Database.database().isPersistenceEnabled = true
         
@@ -98,4 +99,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
 }
+
+
+extension AppDelegate: UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler(.alert)
+    }
+}
+
 

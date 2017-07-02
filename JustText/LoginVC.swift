@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import UserNotifications
 
 class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationControllerDelegate {
     
@@ -94,6 +95,7 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
         img.contentMode = .scaleAspectFill
         img.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(handleProfileImageTapped)))
         img.isUserInteractionEnabled = true
+        img.alpha = 0.8
         return img
     }()
     
@@ -202,12 +204,26 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
         
         profileImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         profileImage.bottomAnchor.constraint(equalTo: loginRegisterSegmentedControl.topAnchor, constant: -24).isActive = true
-        profileImage.widthAnchor.constraint(equalToConstant: 150  ).isActive = true
-        profileImage.heightAnchor.constraint(equalToConstant: 150).isActive = true
+        profileImage.widthAnchor.constraint(equalToConstant: 120  ).isActive = true
+        profileImage.heightAnchor.constraint(equalToConstant: 120).isActive = true
         
         
         setupRegisterButton()
         setupLoginRegisterSegmentedControl()
+                
+    }
+    
+    func askForNotificationPermission() {
+        
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound , .badge]) { (granted, error) in
+            if granted {
+                print("permission granted")
+                
+            }
+            else {
+                print("request denied")
+            }
+        }
         
     }
     
@@ -306,6 +322,7 @@ class LoginVC: UIViewController,UIImagePickerControllerDelegate,UINavigationCont
             
             // user successgully authenticated 
             
+           self.askForNotificationPermission()
             
             let storage_ref = Storage.storage().reference().child("profileImages").child("\(user?.uid)")
             if let profileImageJpeg = UIImageJPEGRepresentation(self.profileImage.image!, 0.1){
